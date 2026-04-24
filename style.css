@@ -1,0 +1,282 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1a1a2e;
+  color: #eee;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#status-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #16213e;
+  border-bottom: 1px solid #0f3460;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+#midi-status {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+#midi-status.connected {
+  color: #00e676;
+}
+
+#midi-status.disconnected {
+  color: #ff5252;
+}
+
+#device-select,
+#time-sig {
+  background: #0f3460;
+  color: #eee;
+  border: 1px solid #1a5276;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  max-width: 300px;
+}
+
+/* --- Metronome Controls --- */
+#metronome-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#btn-metro {
+  background: #0f3460;
+  color: #eee;
+  border: 1px solid #1a5276;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+#btn-metro:hover {
+  background: #1a5276;
+}
+
+#btn-metro.active {
+  background: #1b5e20;
+  border-color: #2e7d32;
+  color: #a5d6a7;
+}
+
+.bpm-label {
+  font-size: 11px;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#bpm-input {
+  width: 52px;
+  background: #0f3460;
+  color: #eee;
+  border: 1px solid #1a5276;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 12px;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+#bpm-input::-webkit-inner-spin-button,
+#bpm-input::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+#beat-indicators {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.beat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2a2a4a;
+  border: 1px solid #3a3a5a;
+  transition: background 0.08s, box-shadow 0.08s;
+}
+
+.beat-dot.active {
+  background: #4fc3f7;
+  box-shadow: 0 0 6px rgba(79, 195, 247, 0.6);
+}
+
+.beat-dot.downbeat {
+  background: #ff9800;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.7);
+}
+
+/* --- Volume Controls --- */
+#volume-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vol-label {
+  font-size: 11px;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.vol-label input[type="range"] {
+  width: 60px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #2a2a4a;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.vol-label input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4fc3f7;
+  border: none;
+  cursor: pointer;
+}
+
+.vol-label input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4fc3f7;
+  border: none;
+  cursor: pointer;
+}
+
+#rec-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+#rec-controls button,
+#rec-controls label {
+  background: #0f3460;
+  color: #eee;
+  border: 1px solid #1a5276;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+#rec-controls button:hover:not(:disabled),
+#rec-controls label:hover {
+  background: #1a5276;
+}
+
+#rec-controls button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+#btn-rec.recording {
+  background: #c62828;
+  border-color: #e53935;
+  color: #fff;
+}
+
+#btn-rec.recording::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5252;
+  animation: rec-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes rec-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+#btn-play.playing {
+  background: #1b5e20;
+  border-color: #2e7d32;
+}
+
+#waterfall {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: block;
+}
+
+#piano {
+  display: flex;
+  position: relative;
+  height: 120px;
+  flex-shrink: 0;
+  background: #111;
+}
+
+.key {
+  position: relative;
+  border: 1px solid #333;
+  cursor: pointer;
+  transition: background-color 0.05s;
+}
+
+.key.white {
+  flex: 1;
+  height: 100%;
+  background: #f0f0f0;
+  z-index: 1;
+}
+
+.key.black {
+  position: absolute;
+  width: 1.2%;
+  height: 60%;
+  background: #222;
+  z-index: 2;
+  border-radius: 0 0 4px 4px;
+}
+
+.key.white.active {
+  background: var(--highlight, #4fc3f7);
+}
+
+.key.black.active {
+  background: var(--highlight, #29b6f6);
+}

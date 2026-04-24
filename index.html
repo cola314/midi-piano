@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIDI Keyboard Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="status-bar">
+    <span id="midi-status">MIDI: 감지 중...</span>
+    <select id="device-select">
+      <option value="">-- 디바이스 선택 --</option>
+    </select>
+    <div id="metronome-controls">
+      <button id="btn-metro" title="메트로놈 ON/OFF">METRO</button>
+      <label class="bpm-label">BPM
+        <input type="number" id="bpm-input" min="40" max="240" value="120">
+      </label>
+      <select id="time-sig">
+        <option value="2">2/4</option>
+        <option value="3">3/4</option>
+        <option value="4" selected>4/4</option>
+        <option value="6">6/8</option>
+      </select>
+      <div id="beat-indicators"></div>
+    </div>
+    <div id="volume-controls">
+      <label class="vol-label" title="피아노 볼륨">🎹
+        <input type="range" id="vol-piano" min="0" max="100" value="80">
+      </label>
+      <label class="vol-label" title="메트로놈 볼륨">METRO
+        <input type="range" id="vol-metro" min="0" max="100" value="30">
+      </label>
+    </div>
+    <div id="rec-controls">
+      <button id="btn-rec" title="녹음">REC</button>
+      <button id="btn-play" title="재생">PLAY</button>
+      <button id="btn-stop" title="정지" disabled>STOP</button>
+      <button id="btn-download" title="JSON 다운로드">SAVE</button>
+      <label id="btn-upload" title="JSON 불러오기">
+        LOAD
+        <input type="file" id="file-input" accept=".json" hidden>
+      </label>
+    </div>
+  </div>
+  <canvas id="waterfall"></canvas>
+  <div id="piano"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -247,7 +247,8 @@ body {
   position: relative;
   height: 120px;
   flex-shrink: 0;
-  background: #111;
+  background: #1a1a2e;
+  margin-top: -1px;
 }
 
 .key {

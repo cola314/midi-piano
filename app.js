@@ -689,7 +689,9 @@
   let pointerNotes = new Set();
 
   function handlePointerNoteOn(noteNumber) {
-    if (pointerNotes.has(noteNumber)) return;
+    if (pointerNotes.has(noteNumber)) {
+      handlePointerNoteOff(noteNumber);
+    }
     pointerNotes.add(noteNumber);
     const velocity = 80;
     activeNotes[noteNumber] = { velocity, startTime: performance.now() };

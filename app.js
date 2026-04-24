@@ -678,6 +678,98 @@
     metronomeGain.gain.value = volMetro.value / 100;
   });
 
+  // --- Mouse/Touch interaction ---
+  function getNotFromEvent(e) {
+    const el = e.target.closest('.key');
+    if (!el) return null;
+    return parseInt(el.dataset.note);
+  }
+
+  let pointerDown = false;
+  let pointerNotes = new Set();
+
+  function handlePointerNoteOn(noteNumber) {
+    if (pointerNotes.has(noteNumber)) return;
+    pointerNotes.add(noteNumber);
+    const velocity = 80;
+    activeNotes[noteNumber] = { velocity, startTime: performance.now() };
+    highlightKey(noteNumber, velocity);
+    noteOn(noteNumber, velocity);
+    if (isRecording) {
+      if (recordedEvents.length === 0) recordStartTime = performance.now();
+      recordedEvents.push({ type: 'on', note: noteNumber, velocity, time: performance.now() - recordStartTime });
+    }
+  }
+
+  function handlePointerNoteOff(noteNumber) {
+    if (!pointerNotes.has(noteNumber)) return;
+    pointerNotes.delete(noteNumber);
+    const info = activeNotes[noteNumber];
+    if (info) {
+      fallingNotes.push({ noteNumber, velocity: info.velocity, startTime: info.startTime, endTime: performance.now() });
+      delete activeNotes[noteNumber];
+    }
+    unhighlightKey(noteNumber);
+    noteOff(noteNumber);
+    if (isRecording) {
+      recordedEvents.push({ type: 'off', note: noteNumber, velocity: 0, time: performance.now() - recordStartTime });
+    }
+  }
+
+  function releaseAllPointerNotes() {
+    for (const n of pointerNotes) {
+      const info = activeNotes[n];
+      if (info) {
+        fallingNotes.push({ noteNumber: n, velocity: info.velocity, startTime: info.startTime, endTime: performance.now() });
+        delete activeNotes[n];
+      }
+      unhighlightKey(n);
+      noteOff(n);
+      if (isRecording) {
+        recordedEvents.push({ type: 'off', note: n, velocity: 0, time: performance.now() - recordStartTime });
+      }
+    }
+    pointerNotes.clear();
+  }
+
+  pianoEl.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    pointerDown = true;
+    const note = getNotFromEvent(e);
+    if (note != null) handlePointerNoteOn(note);
+  });
+
+  pianoEl.addEventListener('pointermove', (e) => {
+    if (!pointerDown) return;
+    const note = getNotFromEvent(e);
+    if (note != null) {
+      // Release notes that we slid off of
+      for (const n of pointerNotes) {
+        if (n !== note) handlePointerNoteOff(n);
+      }
+      handlePointerNoteOn(note);
+    }
+  });
+
+  pianoEl.addEventListener('pointerup', () => {
+    pointerDown = false;
+    releaseAllPointerNotes();
+  });
+
+  pianoEl.addEventListener('pointerleave', () => {
+    pointerDown = false;
+    releaseAllPointerNotes();
+  });
+
+  pianoEl.addEventListener('pointercancel', () => {
+    pointerDown = false;
+    releaseAllPointerNotes();
+  });
+
+  // Prevent default touch behavior (scrolling) on piano
+  pianoEl.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+  pianoEl.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+
   // --- Init ---
   function init() {
     buildPiano();

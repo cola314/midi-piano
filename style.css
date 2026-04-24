@@ -280,3 +280,44 @@ body {
 .key.black.active {
   background: var(--highlight, #29b6f6);
 }
+
+/* --- Tablet & Mobile responsive --- */
+@media (max-width: 1024px) {
+  #status-bar {
+    padding: 6px 10px;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  #piano {
+    height: 100px;
+  }
+
+  .vol-label input[type="range"] {
+    width: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  #status-bar {
+    padding: 4px 8px;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  #piano {
+    height: 80px;
+  }
+
+  #rec-controls {
+    margin-left: 0;
+  }
+
+  .vol-label input[type="range"] {
+    width: 40px;
+  }
+
+  #bpm-input {
+    width: 44px;
+  }
+}
